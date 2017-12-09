@@ -18,15 +18,57 @@ var Main = function() {
   };
 
   var onSuccess = function(stream) {
-    initRecorder(stream);
-    initControl(stream);
+    recorder(stream);
+    control(stream);
+    visualize(stream);
   };
 
   var onError = function(err) {
     console.log('The following error occured: ' + err);
   };
 
-  var initControl = function(stream) {
+  var recorder = function(stream) {
+    state.recorder = new MediaRecorder(stream);
+    state.recorder.ondataavailable = function(e) {
+      state.chunks.push(e.data);
+    };
+  };
+
+  var control = function(stream) {
+    var context  = new AudioContext();
+    var source   = context.createMediaStreamSource(stream);
+    var analyser = context.createAnalyser();
+    analyser.fftSize = 1024;
+    analyser.minDecibels = -50;
+
+    source.connect(analyser);
+
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    const silenceDelay = 500;
+    var silenceStart = performance.now();
+
+    var detect = function(time) {
+      requestAnimationFrame(detect);
+
+      var isRecording = state.recorder.state == "recording";
+      analyser.getByteFrequencyData(data);
+
+      if (data.some(v => v)) {
+        if (!isRecording) {
+          state.recorder.start();
+          console.log("started recording");
+        }
+        silenceStart = time;
+      } else if (isRecording && time - silenceStart > silenceDelay){
+        console.log("stopped recording");
+        state.recorder.stop();
+      }
+    };
+
+    detect();
+  };
+
+  var visualize = function(stream) {
     var context  = new AudioContext();
     var source   = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
@@ -35,15 +77,6 @@ var Main = function() {
     source.connect(analyser);
 
     new Visualize(analyser);
-  };
-
-  var initRecorder = function(stream) {
-    state.recorder = new MediaRecorder(stream);
-    state.recorder.ondataavailable = function(e) {
-      state.chunks.push(e.data);
-    };
-
-    state.recorder.start();
   };
 
   init();
