@@ -1,0 +1,13 @@
+(ns lagom.index
+  (:require [hiccup.page :refer [html5 include-css include-js]]
+            [hiccup.element :refer [link-to]]))
+
+(defn page []
+  (html5 [:head (include-js "js/visualize.js" "js/main.js")
+                (include-css "css/main.css")]
+         [:body [:canvas {:id "visualize"}]]))
+
+(defn init
+  [req page-id]
+  (let* [req  (cowboy_req/reply 200 #erl{} (page) req)]
+    #erl[:ok req page-id]))

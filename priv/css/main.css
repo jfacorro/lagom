@@ -1,0 +1,12 @@
+body {
+    padding: 0px;
+    margin: 0px;
+    background: #000;
+}
+
+#visualize {
+    position: absolute;
+    top: 200px;
+    height: 60px;
+    width: 100%;
+}
