@@ -18,6 +18,7 @@
 
 (def routes
   {:_ [["/"          :lagom.index nil]
+       ["/speech"    :lagom.speech nil]
        ["/css/[...]" :cowboy_static #erl[:priv_dir :lagom "css"]]
        ["/img/[...]" :cowboy_static #erl[:priv_dir :lagom "img"]]
        ["/js/[...]"  :cowboy_static #erl[:priv_dir :lagom "js"]]]})

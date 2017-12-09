@@ -8,6 +8,6 @@
          [:body [:canvas {:id "visualize"}]]))
 
 (defn init
-  [req page-id]
-  (let* [req  (cowboy_req/reply 200 #erl{} (page) req)]
-    #erl[:ok req page-id]))
+  [req state]
+  (let* [req (cowboy_req/reply 200 #erl{} (page) req)]
+    #erl[:ok req state]))

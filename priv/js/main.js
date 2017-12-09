@@ -29,8 +29,25 @@ var Main = function() {
 
   var recorder = function(stream) {
     state.recorder = new MediaRecorder(stream);
+
     state.recorder.ondataavailable = function(e) {
       state.chunks.push(e.data);
+    };
+
+    state.recorder.onstart = function(e) {
+      state.chunks = [];
+    };
+
+    state.recorder.onstop = function(e) {
+      var blob = new Blob(state.chunks, { 'type' : 'audio/webm' });
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/speech', true);
+      xhr.onload = function(e) {
+        console.log('Sent');
+      };
+      xhr.send(blob);
+
+      console.log(blob);
     };
   };
 

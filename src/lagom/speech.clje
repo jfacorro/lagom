@@ -1,0 +1,15 @@
+(ns lagom.speech)
+
+(defn get-audio [req]
+  (let* [#erl[_ body req1] (cowboy_req/read_body req)]
+    (lager/log :info
+               (erlang/self)
+               "Body length: ~p" #erl((erlang/size body)))
+    (file/write_file #erl"test.wav" body #erl(:binary))
+    #erl[body req1]))
+
+(defn init
+  [req state]
+  (let* [#erl[audio req] (get-audio req)
+         req (cowboy_req/reply 200 #erl{} "bla" req)]
+    #erl[:ok req state]))
