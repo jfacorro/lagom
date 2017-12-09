@@ -1,0 +1,15 @@
+(ns lagom.sup)
+
+(def sup-flags #erl{:strategy  :one_for_one
+                    :intensity 1
+                    :period    5})
+
+(def child-specs #erl())
+
+(defn start-link []
+  (supervisor/start_link #erl[:local :lagom.sup]
+                         :lagom.sup
+                         #erl()))
+
+(defn init [args]
+  #erl[:ok #erl[sup-flags child-specs]])

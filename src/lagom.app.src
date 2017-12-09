@@ -1,0 +1,22 @@
+{ application
+, lagom
+, [ {description, "Lagom"}
+  , {vsn, "0.1.0"}
+  , {registered, []}
+  , {mod, { 'lagom.app', []}}
+  , { applications
+    , [ kernel
+      , stdlib
+      , clojerl
+      , cowboy
+      , lager
+      , hiccup
+      , jsx
+      ]
+    }
+  , {env,[]}
+  , {modules, []}
+  , {maintainers, ["Juan Facorro"]}
+  , {licenses, ["Apache 2.0"]}
+  , {links, []}
+ ]}.

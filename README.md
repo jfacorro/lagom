@@ -1,2 +1,9 @@
-# lagom
-by Lagom
+lagom
+=====
+
+An OTP application
+
+Build
+-----
+
+    $ rebar3 compile
