@@ -15,7 +15,7 @@
       , inets
       ]
     }
-  , {env,[]}
+  , {env,[{'google-api-key', <<"AIzaSyC5MZLnOSf2LKx8aCv-vVas4glaR13nvTQ">>}]}
   , {modules, []}
   , {maintainers, ["Juan Facorro"]}
   , {licenses, ["Apache 2.0"]}
