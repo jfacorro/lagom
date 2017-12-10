@@ -1,28 +1,20 @@
 (ns lagom.story
-  (:require [hiccup.page :refer [html5]]
-            [hiccup.element :refer [link-to]]
+  (:require [hiccup.element :refer [link-to]]
             [lagom.html :as html]))
 
-(defn page []
-  (html5
-   (html/head "Story")
-   [:body
-    html/ribbon
-    html/header
-    [:div {:id "content"}
-     [:p "The original goal was to build something in the likes of a personal
+(def content
+  #erl([:p "The original goal was to build something in the likes of a personal
 voice assisant. It turned out to be a little too ambitious, especially
 since the client side audio recording took a lot of time to get right."]
-     [:p "Ideally, our assistant would receive voice commands and ask for more input
+       [:p "Ideally, our assistant would receive voice commands and ask for more input
 when needed, maybe sometimes even respond something clever."]
-     [:p "Right now it can only speak its own language, an unknown dialect
+       [:p "Right now it can only speak its own language, an unknown dialect
  of Swedish that only includes the word "
-      (link-to "/meaning" "lagom")
-      " (like " (link-to "http://gameofthrones.wikia.com/wiki/Hodor" "Hodor")
-      " but without the tragic background story). It can still listen what
-you say, it's just limited in its responses... for now."]]]))
+        (link-to "/meaning" "lagom")
+        " (like " (link-to "http://gameofthrones.wikia.com/wiki/Hodor" "Hodor")
+        " but without the tragic background story). It can still listen what
+you say, it's just limited in its responses... for now."]))
 
 (defn init
   [req state]
-  (let* [req (cowboy_req/reply 200 #erl{} (page) req)]
-    #erl[:ok req state]))
+  #erl[:ok (html/init req "Story" content) state])

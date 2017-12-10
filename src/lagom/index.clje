@@ -1,23 +1,15 @@
 (ns lagom.index
-  (:require [hiccup.page :refer [html5]]
-            [lagom.html :as html]))
+  (:require [lagom.html :as html]))
 
-(defn page []
-  (html5
-   (html/head)
-   [:body
-    html/ribbon
-    html/header
-    [:div {:id "content"}
-     [:div {:id "robot"}
-      [:div {:id "bubble"} "Lagom!"]
-      [:img {:src "img/bli-blu.png"}]]
-     [:canvas {:id "visualize"}]
-     [:div
-      [:h5 {:id "status"} "Listening..."]
-      [:h1 {:id "message"}]]]]))
+(def content
+  #erl([:div#robot
+        [:div#bubble "Lagom!"]
+        [:img {:src "img/bli-blu.png"}]]
+       [:canvas#visualize]
+       [:div
+        [:h5#status "Listening..."]
+        [:h1#message]]))
 
 (defn init
   [req state]
-  (let* [req (cowboy_req/reply 200 #erl{} (page) req)]
-    #erl[:ok req state]))
+  #erl[:ok (html/init req nil content) state])

@@ -21,3 +21,14 @@
     [:title (str "Lagom" (and title (str " - " title)))]
     (when (not title) (include-js "js/visualize.js" "js/main.js"))
     (include-css "css/main.css")]))
+
+(defn page [title content]
+  (html5
+   (head title)
+   [:body
+    ribbon
+    header
+    [:div#content content]]))
+
+(defn init [req title content]
+  (cowboy_req/reply 200 #erl{} (page title content) req))
