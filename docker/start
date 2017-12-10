@@ -8,5 +8,5 @@ docker run -d                    \
         --restart unless-stopped \
         --name=lagom             \
         -v $LOGDIR:$LOGDIR       \
-        -p 8080:8080             \
+        -p 443:8443              \
         jfacorro/lagom:latest

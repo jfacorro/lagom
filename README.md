@@ -19,4 +19,6 @@ all dependencies by running:
 If you don't want to build the image yourself you can run the latest
 image publish with the following command:
 
-    $ docker run -p 8080:8080 -it jfacorro/lagom:latest
+    $ docker run -p 8443:8443 -it jfacorro/lagom:latest
+
+and then visit [https://localhost:8443](https://localhost:8443).
