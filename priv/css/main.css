@@ -5,6 +5,13 @@ body {
     text-align: center;
 }
 
+#ribbon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+}
+
 #status {
     color: #CCC;
     font-family: impact;
