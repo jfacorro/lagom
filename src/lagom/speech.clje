@@ -20,7 +20,7 @@
                  #erl()))
 
 (defn api-url []
-  (->> (os/getenv "GOOGLE_API_KEY" #erl"")
+  (->> (application/get_env :lagom :google-api-key "")
        (str "https://speech.googleapis.com/v1/speech:recognize?key=")))
 
 (defn process [audio encoding]

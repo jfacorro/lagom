@@ -12,6 +12,7 @@
       , lager
       , hiccup
       , jsx
+      , inets
       ]
     }
   , {env,[]}
