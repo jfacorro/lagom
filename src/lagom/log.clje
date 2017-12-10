@@ -1,0 +1,13 @@
+(ns lagom.log)
+
+(defn- log [level msg args]
+  (lager/log level (erlang/self) msg args))
+
+(defn debug [msg & args]
+  (log :debug msg args))
+
+(defn info [msg & args]
+  (log :info msg args))
+
+(defn error [msg & args]
+  (log :error msg args))

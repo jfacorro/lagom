@@ -9,7 +9,7 @@ var Main = function() {
   var init = function() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       console.log('getUserMedia supported.');
-      navigator.mediaDevices.getUserMedia ({audio: true})
+      navigator.mediaDevices.getUserMedia({audio: true, video: false})
         .then(onSuccess)
         .catch(onError);
     } else {
@@ -28,7 +28,8 @@ var Main = function() {
   };
 
   var recorder = function(stream) {
-    state.recorder = new MediaRecorder(stream);
+    var recorderOpts = {audioBitsPerSecond: 16000, mimeType: 'audio/webm'};
+    state.recorder   = new MediaRecorder(stream, recorderOpts);
 
     state.recorder.ondataavailable = function(e) {
       state.chunks.push(e.data);
