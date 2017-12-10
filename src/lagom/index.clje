@@ -10,7 +10,7 @@
            [:div {:id "bubble-text"} "Lagom!"]
            [:img {:src "img/bli-blu.png"}]]
           [:canvas {:id "visualize"}]
-          [:div [:h1 {:id "message"}]]]))
+          [:div [:h1 {:id "message"} "Speak"]]]))
 
 (defn init
   [req state]
