@@ -39,6 +39,7 @@ var Main = function() {
     }
   };
 
+  // Creates a recorder
   var recorder = function(stream) {
     var recorderOpts = {audioBitsPerSecond: 16000, mimeType: 'audio/webm'};
     state.recorder   = new MediaRecorder(stream, recorderOpts);
@@ -62,6 +63,7 @@ var Main = function() {
     };
   };
 
+  // Used to detect silence and when to start/stop recording
   var control = function(stream) {
     var context  = new AudioContext();
     var source   = context.createMediaStreamSource(stream);
