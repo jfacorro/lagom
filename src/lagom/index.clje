@@ -7,7 +7,7 @@
                 (include-css "css/main.css")]
          [:body
           [:div {:id "robot"}
-           [:div {:id "bubble-text"} "Lagom!"]
+           [:div {:id "bubble"} "Lagom!"]
            [:img {:src "img/bli-blu.png"}]]
           [:canvas {:id "visualize"}]
           [:div [:h1 {:id "message"} "Speak"]]]))

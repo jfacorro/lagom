@@ -22,7 +22,7 @@ body {
     display: inline-block;
 }
 
-#bubble-text {
+#bubble {
     display: inline-block;
     position: relative;
     top: 25px;

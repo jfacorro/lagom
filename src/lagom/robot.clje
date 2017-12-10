@@ -1,0 +1,18 @@
+(ns lagom.robot
+  (:require [clojure.string :as str]))
+
+(def possible-messages
+  ["Lagom!" "Lagom?" "Lagom..." "Lagom." "Lagom, la - gom"])
+
+(defn- maybe-upper-case [msg]
+  (if (< (rand-int 100) 20)
+    (str/upper-case msg)
+    msg))
+
+(defn* reply
+  ([nil] "???")
+  ([message]
+   (->> (count possible-messages)
+        rand-int
+        (get possible-messages)
+        maybe-upper-case)))

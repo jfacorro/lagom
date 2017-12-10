@@ -29,14 +29,16 @@ var Main = function() {
 
   var onSpeech = function() {
     var response = JSON.parse(this.responseText);
-    console.log(this.responseText);
     console.log(response);
-    if(response.results) {
-      var res = response.results[0];
-      var alt = res.alternatives[0];
-      var message = document.getElementById('message');
-      message.innerHTML = alt.transcript;
+
+    var message = document.getElementById('message');
+    var bubble = document.getElementById('bubble');
+
+    if(response.human) {
+      message.innerHTML = response.human;
     }
+
+    bubble.innerHTML = response.robot;
   };
 
   // Creates a recorder
@@ -69,7 +71,7 @@ var Main = function() {
     var source   = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
     analyser.fftSize = 1024;
-    analyser.minDecibels = -50;
+    analyser.minDecibels = -40;
 
     source.connect(analyser);
 
