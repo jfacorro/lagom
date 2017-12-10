@@ -1,13 +1,13 @@
 (ns lagom.speech
   (:require [lagom.log :as log]
-            [lagom.audio :as audio]))
+            [lagom.audio :as audio]
+            [lagom.robot :as robot]))
 
-(defn encode [audio]
-  (base64/encode audio))
+(def speech-api-url "https://speech.googleapis.com/v1/speech:recognize?key=")
 
-(defn speech-request [audio-base64 encoding]
-  #erl{:config #erl{:encoding encoding
-                    :sampleRateHertz 16000
+(defn speech-request [audio-base64]
+  #erl{:config #erl{:encoding audio/encoding
+                    :sampleRateHertz audio/sample-rate
                     :languageCode "en-US"
                     :profanityFilter false
                     :enableWordTimeOffsets false}
@@ -21,22 +21,32 @@
 
 (defn api-url []
   (->> (application/get_env :lagom :google-api-key "")
-       (str "https://speech.googleapis.com/v1/speech:recognize?key=")))
+       (str speech-api-url)))
 
-(defn process [audio encoding]
-  (let [audio-base64 (encode audio)
-        req-body (jsx/encode (speech-request audio-base64 encoding))
+(defn build-response [res-json]
+  (let [message (-> res-json
+                     (get "results" []) first
+                     (get "alternatives" []) first
+                     (get "transcript" nil))]
+    #erl{:human (or message :null)
+         :robot (robot/reply message)}))
+
+(defn process [audio]
+  (let [audio-base64 (audio/encode audio)
+        req-body (jsx/encode (speech-request audio-base64))
         url (api-url)]
     (case (http-request :post url req-body)
       #erl[:ok res]
       (let [[status-line _ res-body] res
-            [_ status-code _] status-line]
-        (log/info "~p - ~p" status-code res-body)
-        #erl[status-code res-body])
+            [_ status-code _] status-line
+            res-json (jsx/decode (str res-body) #erl(:return_maps))
+            res-json (build-response res-json)]
+        (log/info "Google API: ~p - ~p" status-code res-json)
+        #erl[200 (jsx/encode res-json)])
 
       #erl[:error reason]
       (do
-        (log/info "Error: ~p" reason)
+        (log/info "Google API Error: ~p" reason)
         #erl[500 (str reason)]))))
 
 (defn init
@@ -44,6 +54,6 @@
   (log/info "Got some audio to process...")
   (let [[_ audio req] (cowboy_req/read_body req)
         flac-audio (audio/convert audio)
-        [status-code res-body] (process flac-audio "FLAC")
+        [status-code res-body] (process flac-audio)
         req (cowboy_req/reply status-code #erl{} res-body req)]
     #erl[:ok req state]))

@@ -4,9 +4,16 @@ var Main = function() {
     recorder: null,
     chunks: []
   };
-  self.state = state;
+  self.state   = state;
+  self.status  = null;
+  self.message = null;
+  self.bubble  = null;
 
   var init = function() {
+    self.status  = document.getElementById('status');
+    self.message = document.getElementById('message');
+    self.bubble  = document.getElementById('bubble');
+
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       console.log('getUserMedia supported.');
       navigator.mediaDevices.getUserMedia({audio: true, video: false})
@@ -29,16 +36,19 @@ var Main = function() {
 
   var onSpeech = function() {
     var response = JSON.parse(this.responseText);
-    console.log(this.responseText);
     console.log(response);
-    if(response.results) {
-      var res = response.results[0];
-      var alt = res.alternatives[0];
-      var message = document.getElementById('message');
-      message.innerHTML = alt.transcript;
+
+    if(response.human) {
+      message.innerHTML = response.human;
+    } else {
+      message.innerHTML = "-";
     }
+
+    bubble.className = "";
+    bubble.innerHTML = response.robot;
   };
 
+  // Creates a recorder
   var recorder = function(stream) {
     var recorderOpts = {audioBitsPerSecond: 16000, mimeType: 'audio/webm'};
     state.recorder   = new MediaRecorder(stream, recorderOpts);
@@ -49,9 +59,14 @@ var Main = function() {
 
     state.recorder.onstart = function(e) {
       state.chunks = [];
+
+      self.status.innerHTML = "Recording...";
     };
 
     state.recorder.onstop = function(e) {
+      bubble.innerHTML = "&nbsp;";
+      bubble.className = "processing";
+
       var blob = new Blob(state.chunks, { 'type' : 'audio/webm' });
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/speech', true);
@@ -59,15 +74,18 @@ var Main = function() {
       xhr.send(blob);
 
       console.log(blob);
+
+      self.status.innerHTML = "Listening...";
     };
   };
 
+  // Used to detect silence and when to start/stop recording
   var control = function(stream) {
     var context  = new AudioContext();
     var source   = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
     analyser.fftSize = 1024;
-    analyser.minDecibels = -50;
+    analyser.minDecibels = -35;
 
     source.connect(analyser);
 
