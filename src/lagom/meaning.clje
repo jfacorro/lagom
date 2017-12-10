@@ -1,0 +1,26 @@
+(ns lagom.meaning
+  (:require [hiccup.page :refer [html5]]
+            [lagom.html :as html]))
+
+(defn page []
+  (html5
+   (html/head "Meaning")
+   [:body
+    html/ribbon
+    html/header
+    [:div {:id "content"}
+     [:p "Lagom is a Swedish word meaning \"just the right amount\"."]
+     [:p "The Lexin Swedish-English dictionary defines lagom as \"enough, sufficient,
+  adequate, just right\". Lagom is also widely translated as \"in moderation\",
+  \"in balance\", \"perfect-simple\", and \"suitable\" (in matter of amounts).
+  Whereas words like sufficient and average suggest some degree of abstinence,
+  scarcity, or failure, lagom carries the connotation of appropriateness,
+  although not necessarily perfection. The archetypical Swedish proverb
+  \"Lagom ar bast\", literally \"The right amount is best\", is also translated
+  as \"Enough is as good as a feast\".[1] That same proverb is translated as
+  \"There is virtue in moderation\"."]]]))
+
+(defn init
+  [req state]
+  (let* [req (cowboy_req/reply 200 #erl{} (page) req)]
+    #erl[:ok req state]))

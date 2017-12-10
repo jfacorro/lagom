@@ -30,7 +30,7 @@ The original goal was to build something in the likes of a personal
 voice assisant. It turned out to be a little too ambitious, especially
 since the client side audio recording took a lot of time to get right.
 
-Ideally, our assisant would receive voice commands and ask for more input
+Ideally, our assistant would receive voice commands and ask for more input
 when needed, maybe sometimes respond something clever. Right now it can
 only speak its own language, an unknown dialect of Swedish that only
 includes the word `lagom` (like

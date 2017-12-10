@@ -5,6 +5,30 @@ body {
     text-align: center;
 }
 
+#header {
+    margin: 10px 0px;
+}
+#header a {
+    margin: 0px 10px;
+    font-family: impact;
+    font-weight: lighter;
+    font-size: 2em;
+    color: #333333;
+    text-decoration: none;
+}
+
+#content {
+    text-align: center;
+}
+
+#content p {
+    font-family: "Lucida Console", Monaco, monospace;
+    text-align: justify;
+    width: 800px;
+    margin: 0px auto;
+    margin-top: 30px;
+}
+
 #ribbon {
     position: absolute;
     top: 0;
