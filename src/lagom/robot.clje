@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]))
 
 (def possible-messages
-  ["Lagom!" "Lagom?" "Lagom..." "Lagom." "Lagom, la - gom"])
+  ["Lagom!" "Lagom?" "Lagom..." "Lagom."])
 
 (defn- maybe-upper-case [msg]
   (if (< (rand-int 100) 20)

@@ -5,6 +5,13 @@ body {
     text-align: center;
 }
 
+#status {
+    color: #CCC;
+    font-family: impact;
+    font-size: 1em;
+    margin: 0px;
+}
+
 #message {
     color: #000;
     text-align: center;
@@ -37,4 +44,30 @@ body {
 #robot img {
     width: 300px;
     float: left;
+}
+
+.processing {
+    font-family: "Lucida Console", Monaco, monospace;
+}
+
+.processing:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4,end) 900ms infinite;
+    animation: ellipsis steps(4,end) 900ms infinite;
+    content: "\2026"; /* ascii code for the ellipsis character */
+    width: 0px;
+}
+
+@keyframes ellipsis {
+    to {
+        width: 1.25em;
+    }
+}
+
+@-webkit-keyframes ellipsis {
+    to {
+        width: 1.25em;
+    }
 }

@@ -3,14 +3,18 @@
             [hiccup.element :refer [link-to]]))
 
 (defn page []
-  (html5 [:head (include-js "js/visualize.js" "js/main.js")
-                (include-css "css/main.css")]
+  (html5 [:head
+          [:title "Lagom"]
+          (include-js "js/visualize.js" "js/main.js")
+          (include-css "css/main.css")]
          [:body
           [:div {:id "robot"}
            [:div {:id "bubble"} "Lagom!"]
            [:img {:src "img/bli-blu.png"}]]
           [:canvas {:id "visualize"}]
-          [:div [:h1 {:id "message"} "Speak"]]]))
+          [:div
+           [:h5 {:id "status"} "Listening..."]
+           [:h1 {:id "message"}]]]))
 
 (defn init
   [req state]
