@@ -1,18 +1,47 @@
 (ns lagom.robot
   (:require [clojure.string :as str]))
 
-(def possible-messages
-  ["Lagom!" "Lagom?" "Lagom..." "Lagom."])
+(declare commands)
 
-(defn- maybe-upper-case [msg]
-  (if (< (rand-int 100) 20)
-    (str/upper-case msg)
-    msg))
+;; NLP
+
+(def stop-words (-> (str (code/priv_dir :lagom) "/nlp/stopwords.txt")
+                    slurp
+                    str/split-lines
+                    set))
+
+(defn- process-message [msg]
+  (->> (str/split msg #"\s+")
+       (map str/lower-case)
+       (filter (comp not stop-words))))
+
+;; Commands
+
+(defn- list-commands [& _]
+  (apply str
+         (cons "Commands: " (interpose " " (keys @commands)))))
+
+(defn- create-command [& [name]]
+  (if name
+    (str "Created command " name)
+    "I would need more information to create a command"))
+
+(def commands
+  (atom {"list"   {"commands" list-commands}
+         "create" {"command" create-command}}))
+
+(defn- execute-command [msg]
+  (loop [cmds @commands
+         [x & xs] (process-message msg)]
+    (prn cmds)
+    (cond
+      (or (fn? cmds) (var? cmds)) (apply cmds xs)
+      (nil? cmds) (str "Command " x " not found")
+      :else (recur (cmds x) xs))))
+
+;; API
 
 (defn* reply
   ([nil] "Sorry, I didn't get that")
-  ([message]
-   (->> (count possible-messages)
-        rand-int
-        (get possible-messages)
-        maybe-upper-case)))
+  ([msg]
+   (execute-command msg)))
