@@ -84,8 +84,8 @@ var Main = function() {
     var context  = new AudioContext();
     var source   = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
-    analyser.fftSize = 1024;
-    analyser.minDecibels = -35;
+    analyser.fftSize = 128;
+    analyser.minDecibels = -40;
 
     source.connect(analyser);
 

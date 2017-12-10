@@ -15,7 +15,7 @@ var Visualize = function(analyser) {
 
     analyser.getByteTimeDomainData(data);
 
-    context.fillStyle = 'rgb(0, 0, 0)';
+    context.fillStyle = 'rgb(51, 51, 51)';
     context.fillRect(0, 0, width, height);
 
     context.lineWidth = 2;
