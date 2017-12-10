@@ -1,0 +1,25 @@
+(ns lagom.audio
+  (:require [lagom.log :as log]))
+
+(defn save [audio]
+  (let [n (erlang/unique_integer #erl(:positive :monotonic))
+        filename (str "audio-" n  ".webm")]
+    (file/write_file filename audio #erl(:binary))
+    filename))
+
+(defn ffmpeg [source target]
+  (-> (str "ffmpeg -i " source " -ar 16000 -c:a flac " target)
+      erlang/binary_to_list
+      os/cmd))
+
+(defn convert [audio]
+  (let [source (save audio)
+        rootname (filename/rootname source)
+        target (str rootname ".flac")
+        cmd-result (ffmpeg source target)
+        [_ audio] (file/read_file target)]
+    (log/info "source=~p - target=~p" source target)
+    (log/info "cmd-result=~p" cmd-result)
+    (file/delete source)
+    (file/delete target)
+    audio))

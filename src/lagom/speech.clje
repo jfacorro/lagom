@@ -1,12 +1,13 @@
 (ns lagom.speech
-  (:require [lagom.log :as log]))
+  (:require [lagom.log :as log]
+            [lagom.audio :as audio]))
 
 (defn encode [audio]
   (base64/encode audio))
 
 (defn speech-request [audio-base64 encoding]
   #erl{:config #erl{:encoding encoding
-                    :sampleRateHertz 48000
+                    :sampleRateHertz 16000
                     :languageCode "en-US"
                     :profanityFilter false
                     :enableWordTimeOffsets false}
@@ -18,11 +19,14 @@
                  #erl()
                  #erl()))
 
+(defn api-url []
+  (->> (os/getenv "GOOGLE_API_KEY" #erl"")
+       (str "https://speech.googleapis.com/v1/speech:recognize?key=")))
+
 (defn process [audio encoding]
   (let [audio-base64 (encode audio)
         req-body (jsx/encode (speech-request audio-base64 encoding))
-        api-key (str (os/getenv "GOOGLE_API_KEY" #erl""))
-        url (str "https://speech.googleapis.com/v1/speech:recognize?key=" api-key)]
+        url (api-url)]
     (case (http-request :post url req-body)
       #erl[:ok res]
       (let [[status-line _ res-body] res
@@ -35,15 +39,11 @@
         (log/info "Error: ~p" reason)
         #erl[500 (str reason)]))))
 
-(defn save-audio [audio]
-  (let [n (erlang/unique_integer #erl(:positive :monotonic))]
-    (file/write_file (str "audio-" n  ".wav") audio #erl(:binary))))
-
 (defn init
   [req0 state]
   (log/info "Got some audio to process...")
   (let* [#erl[_ audio req] (cowboy_req/read_body req0)
-         _ (save-audio audio)
-         result (process audio "FLAC")
+         flac-audio (audio/convert audio)
+         result (process flac-audio "FLAC")
          req (cowboy_req/reply 200 #erl{} "" req)]
     #erl[:ok req state]))
