@@ -4,9 +4,13 @@ body {
     background: #000;
 }
 
+#message {
+    height:200px;
+    color: #FFF;
+    text-align: center;
+}
+
 #visualize {
-    position: absolute;
-    top: 200px;
     height: 60px;
     width: 100%;
 }

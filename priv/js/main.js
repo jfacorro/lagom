@@ -27,6 +27,18 @@ var Main = function() {
     console.log('The following error occured: ' + err);
   };
 
+  var onSpeech = function() {
+    var response = JSON.parse(this.responseText);
+    console.log(this.responseText);
+    console.log(response);
+    if(response.results) {
+      var res = response.results[0];
+      var alt = res.alternatives[0];
+      var message = document.getElementById('message');
+      message.innerHTML = alt.transcript;
+    }
+  };
+
   var recorder = function(stream) {
     var recorderOpts = {audioBitsPerSecond: 16000, mimeType: 'audio/webm'};
     state.recorder   = new MediaRecorder(stream, recorderOpts);
@@ -43,9 +55,7 @@ var Main = function() {
       var blob = new Blob(state.chunks, { 'type' : 'audio/webm' });
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/speech', true);
-      xhr.onload = function(e) {
-        console.log('Sent');
-      };
+      xhr.onload = onSpeech;
       xhr.send(blob);
 
       console.log(blob);

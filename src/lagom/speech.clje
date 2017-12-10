@@ -40,10 +40,10 @@
         #erl[500 (str reason)]))))
 
 (defn init
-  [req0 state]
+  [req state]
   (log/info "Got some audio to process...")
-  (let* [#erl[_ audio req] (cowboy_req/read_body req0)
-         flac-audio (audio/convert audio)
-         result (process flac-audio "FLAC")
-         req (cowboy_req/reply 200 #erl{} "" req)]
+  (let [[_ audio req] (cowboy_req/read_body req)
+        flac-audio (audio/convert audio)
+        [status-code res-body] (process flac-audio "FLAC")
+        req (cowboy_req/reply status-code #erl{} res-body req)]
     #erl[:ok req state]))

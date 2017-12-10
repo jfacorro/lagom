@@ -5,7 +5,8 @@
 (defn page []
   (html5 [:head (include-js "js/visualize.js" "js/main.js")
                 (include-css "css/main.css")]
-         [:body [:canvas {:id "visualize"}]]))
+         [:body [:div [:h1 {:id "message"}]]
+                [:canvas {:id "visualize"}]]))
 
 (defn init
   [req state]
