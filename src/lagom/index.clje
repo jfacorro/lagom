@@ -2,12 +2,20 @@
   (:require [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.element :refer [link-to]]))
 
+(def ribbon-img
+  "https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png")
+
+(def ribbon (link-to "https://github.com/spawnfest/lagom"
+                     [:img#ribbon {:src ribbon-img
+                                   :alt "Fork me on GitHub"}]))
+
 (defn page []
   (html5 [:head
           [:title "Lagom"]
           (include-js "js/visualize.js" "js/main.js")
           (include-css "css/main.css")]
          [:body
+          ribbon
           [:div {:id "robot"}
            [:div {:id "bubble"} "Lagom!"]
            [:img {:src "img/bli-blu.png"}]]
