@@ -9,8 +9,8 @@
           (include-css "css/main.css")]
          [:body
           [:div {:id "robot"}
-           [:div {:id "bubble"} "Lagom!"]
-           [:img {:src "img/bli-blu.png"}]]
+           [:img {:src "img/bli-blu.png"}]
+           [:div {:id "bubble"} "Lagom!"]]
           [:canvas {:id "visualize"}]
           [:div
            [:h5 {:id "status"} "Listening..."]
