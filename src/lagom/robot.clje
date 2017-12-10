@@ -10,7 +10,7 @@
     msg))
 
 (defn* reply
-  ([nil] "???")
+  ([nil] "Sorry, I didn't get that")
   ([message]
    (->> (count possible-messages)
         rand-int

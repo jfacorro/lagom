@@ -62,18 +62,18 @@ body {
 
 #bubble {
     display: inline-block;
-    position: relative;
-    top: 25px;
-    left: 120px;
+    position: absolute;
+    top: 40px;
+    left: 435px;
     float: left;
-    height: 80px;
-    width: 90px;
-    line-height: 80px;
+    width: 425px;
+    height: 100px;
+    line-height: 100px;
     font-family: "Lucida Console", Monaco, monospace;
 }
 
 #robot img {
-    width: 300px;
+    width: 800px;
     float: left;
 }
 
