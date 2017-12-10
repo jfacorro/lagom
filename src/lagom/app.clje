@@ -29,6 +29,9 @@
 (defn start-cowboy []
   (let [routes (->list (map route->cowboy routes))
         dispatch (cowboy_router/compile routes)
-        transport-opts (->proplist {:port 8080})
+        priv-dir (code/priv_dir :lagom)
+        transport-opts (->proplist {:port 8443
+                                    :certfile (str priv-dir "/ssl/server.crt")
+                                    :keyfile (str priv-dir "/ssl/server.key")})
         protocol-opts #erl{:env #erl{:dispatch dispatch}}]
-    (cowboy/start_clear :lagom.listener transport-opts protocol-opts)))
+    (cowboy/start_tls :lagom.https transport-opts protocol-opts)))
