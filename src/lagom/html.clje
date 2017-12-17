@@ -19,6 +19,7 @@
   ([title]
    [:head
     [:title (str "Lagom" (and title (str " - " title)))]
+    [:meta {:charset "UTF-8"}]
     (when (not title) (include-js "js/visualize.js" "js/main.js"))
     (include-css "css/main.css")]))
 
