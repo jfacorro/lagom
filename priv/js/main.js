@@ -60,8 +60,6 @@ var Main = function() {
 
     state.recorder.onstart = function(e) {
       state.chunks = [];
-
-      self.status.innerHTML = "Recording...";
     };
 
     state.recorder.onstop = function(e) {
@@ -103,6 +101,7 @@ var Main = function() {
       if (data.some(v => v)) {
         if (!isRecording) {
           state.recorder.start();
+          self.status.innerHTML = "Recording...";
           console.log("started recording");
         }
         silenceStart = time;
