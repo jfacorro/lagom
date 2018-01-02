@@ -8,6 +8,7 @@ var Main = function() {
   self.status  = null;
   self.message = null;
   self.bubble  = null;
+  self.mime    = MediaRecorder.isTypeSupported('audio/webm')? 'audio/webm' : 'audio/ogg';
 
   var init = function() {
     self.status  = document.getElementById('status');
@@ -50,7 +51,7 @@ var Main = function() {
 
   // Creates a recorder
   var recorder = function(stream) {
-    var recorderOpts = {audioBitsPerSecond: 16000, mimeType: 'audio/webm'};
+    var recorderOpts = {audioBitsPerSecond: 16000, mimeType: self.mime};
     state.recorder   = new MediaRecorder(stream, recorderOpts);
 
     state.recorder.ondataavailable = function(e) {
@@ -67,7 +68,7 @@ var Main = function() {
       bubble.innerHTML = "&nbsp;";
       bubble.className = "processing";
 
-      var blob = new Blob(state.chunks, { 'type' : 'audio/webm' });
+      var blob = new Blob(state.chunks, { 'type' : self.mime });
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/speech', true);
       xhr.onload = onSpeech;
@@ -84,7 +85,7 @@ var Main = function() {
     var context  = new AudioContext();
     var source   = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
-    analyser.fftSize = 128;
+    analyser.fftSize = 32;
     analyser.minDecibels = -40;
 
     source.connect(analyser);
@@ -118,7 +119,7 @@ var Main = function() {
     var context  = new AudioContext();
     var source   = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
-    analyser.fftSize = 2048;
+    analyser.fftSize = 1024;
 
     source.connect(analyser);
 
