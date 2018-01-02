@@ -11,7 +11,7 @@
     filename))
 
 (defn- ffmpeg [source target]
-  (-> (str "ffmpeg -i " source " -ar " sample-rate  " -c:a flac " target)
+  (-> (str "ffmpeg -i " source " -ar " sample-rate  " -ac 1 -c:a flac " target)
       erlang/binary_to_list
       os/cmd))
 
