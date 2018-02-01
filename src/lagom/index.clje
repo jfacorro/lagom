@@ -7,7 +7,6 @@
         [:img {:src "img/bli-blu.png"}]]
        [:canvas#visualize]
        [:div
-        [:h5#status "Listening..."]
         [:h1#message]]))
 
 (defn init
