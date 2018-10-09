@@ -100,12 +100,12 @@ var Main = function() {
     var source   = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
     analyser.fftSize = 2048;
-    analyser.minDecibels = -40;
+    analyser.minDecibels = -50;
 
     source.connect(analyser);
 
     const data = new Uint8Array(analyser.frequencyBinCount);
-    const silenceDelay = 1000;
+    const silenceDelay = 500;
     var silenceStart = performance.now();
 
     var isSilence = function(data) {

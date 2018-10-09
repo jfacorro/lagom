@@ -10,30 +10,21 @@
 (defn stop [state]
   state)
 
-(defn ->list [s]
-  (clj_rt/to_list.1 s))
-
-(defn ->proplist [m]
-  (->list (map into-tuple m)))
-
 (def routes
-  {:_ [["/"          :lagom.index nil]
-       ["/story"     :lagom.story nil]
-       ["/meaning"   :lagom.meaning nil]
-       ["/speech"    :lagom.speech nil]
-       ["/css/[...]" :cowboy_static #erl[:priv_dir :lagom "css"]]
-       ["/img/[...]" :cowboy_static #erl[:priv_dir :lagom "img"]]
-       ["/js/[...]"  :cowboy_static #erl[:priv_dir :lagom "js"]]]})
-
-(defn- route->cowboy [[host handlers]]
-  #erl[host (->list (map into-tuple handlers))])
+  {:_ #erl(["/"          :lagom.index nil]
+           ["/story"     :lagom.story nil]
+           ["/meaning"   :lagom.meaning nil]
+           ["/speech"    :lagom.speech nil]
+           ["/css/[...]" :cowboy_static #erl[:priv_dir :lagom "css"]]
+           ["/img/[...]" :cowboy_static #erl[:priv_dir :lagom "img"]]
+           ["/js/[...]"  :cowboy_static #erl[:priv_dir :lagom "js"]])})
 
 (defn start-cowboy []
-  (let [routes (->list (map route->cowboy routes))
+  (let [routes (->erl routes true)
         dispatch (cowboy_router/compile routes)
         priv-dir (code/priv_dir :lagom)
-        transport-opts (->proplist {:port 8443
-                                    :certfile (str priv-dir "/ssl/server.crt")
-                                    :keyfile (str priv-dir "/ssl/server.key")})
-        protocol-opts #erl{:env #erl{:dispatch dispatch}}]
+        transport-opts (maps/to_list (->erl {:port 8443
+                                             :certfile (str priv-dir "/ssl/server.crt")
+                                             :keyfile (str priv-dir "/ssl/server.key")}))
+        protocol-opts (->erl {:env {:dispatch dispatch}})]
     (cowboy/start_tls :lagom.https transport-opts protocol-opts)))
